@@ -1,0 +1,26 @@
+---
+
+haproxy: &cfg
+    image: mycloud-haproxy
+    name: haproxy
+    tty: true
+    detach: true
+    publish:
+        - 80:80
+    env:
+        - SENTINEL_ETCD_URI=http://$(hostname -i | tr -d ' '):4001
+        - SENTINEL_ETCD_PREFIX=beacon
+        - SENTINEL_ETCD_DIRECTORY=services
+        - SENTINEL_LOG_LEVEL=info
+        - SENTINEL_LOG_CONSOLE=true
+        - SENTINEL_LOG_SYSLOG=false
+
+haproxy-shell:
+    <<: *cfg
+    name: ''
+    rm: true
+    interactive: true
+    detach: false
+    command: bash
+
+...
